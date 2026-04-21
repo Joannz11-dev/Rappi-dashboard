@@ -1,4 +1,4 @@
-# Rappi Store Availability Dashboard
+# Rappi store availability dashboard
 
 Dashboard operativo en tiempo real para monitorear la disponibilidad de tiendas en la plataforma Rappi, equipado con análisis histórico, visualizaciones interactivas y un asistente conversacional basado en IA.
 
