@@ -8,21 +8,44 @@ app.use(express.static("public"));
 
 app.post("/api/chat", async (req, res) => {
   try {
-    const response = await fetch(
+    const hfRes = await fetch(
       "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3/v1/chat/completions",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.Huggingfkey}`,
+          Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(req.body),
-      },
+      }
     );
 
-    const data = await response.json();
+    const text = await hfRes.text();
+
+    // 👇 DEBUG CLAVE
+    console.log("HF raw response:", text.slice(0, 200));
+
+    if (!hfRes.ok) {
+      return res.status(hfRes.status).json({
+        error: "Error desde HuggingFace",
+        details: text,
+      });
+    }
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      return res.status(500).json({
+        error: "Respuesta no es JSON",
+        raw: text,
+      });
+    }
+
     res.json(data);
+
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });

@@ -397,6 +397,7 @@
     color: var(--muted);
     line-height: 1.5;
   }
+  
   /* MESSAGES */
   .chat-messages {
     flex: 1;
@@ -993,9 +994,8 @@ function updateKPIs(day) {
 }
 
 // ============================================================
-// CHATBOT
+// CHATBOT - MODIFICADO PARA USAR EL ENDPOINT /api/chat
 // ============================================================
-let hfToken = null;
 let chatHistory = [];
 
 function addMsg(role, text, isTyping = false) {
@@ -1078,10 +1078,6 @@ async function sendMessage() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if (!text) return;
-  if (!hfToken) {
-    alert('Por favor ingresa tu token de Hugging Face primero.');
-    return;
-  }
 
   input.value = '';
   input.style.height = 'auto';
@@ -1094,36 +1090,36 @@ async function sendMessage() {
 
   try {
     const systemPrompt = buildSystemPrompt();
+    
+    // Construir el historial de mensajes
     const messages = [
-      { role: 'user', content: systemPrompt + '\n\n---\n\nUsuario: ' + chatHistory[0].content }
+      { role: 'system', content: systemPrompt }
     ];
-
-    // Build full conversation for multi-turn
-    if (chatHistory.length > 1) {
-      messages.length = 0;
-      messages.push({ role: 'user', content: systemPrompt });
-      messages.push({ role: 'assistant', content: 'Entendido. Tengo acceso a todos los datos del dashboard. ¿En qué puedo ayudarte?' });
-      for (let i = 0; i < chatHistory.length; i++) {
-        messages.push({ role: chatHistory[i].role === 'user' ? 'user' : 'assistant', content: chatHistory[i].content });
-      }
+    
+    // Agregar historial de conversación
+    for (let i = 0; i < chatHistory.length - 1; i++) {
+      messages.push({
+        role: chatHistory[i].role === 'user' ? 'user' : 'assistant',
+        content: chatHistory[i].content
+      });
     }
+    
+    // Agregar el mensaje actual
+    messages.push({ role: 'user', content: text });
 
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        model: 'mistralai/Mistral-7B-Instruct-v0.3',
-        messages,
-        max_tokens: 200,
-        temperature: 0.4,
-      })
+      body: JSON.stringify({ messages })
     });
 
     const data = await res.json();
 
-    if (data.error) throw new Error(data.error);
+    if (!res.ok) {
+      throw new Error(data.error || 'Error en el servidor');
+    }
 
     const reply = data.choices?.[0]?.message?.content || 'No obtuve respuesta del modelo.';
     chatHistory.push({ role: 'assistant', content: reply });
@@ -1131,8 +1127,9 @@ async function sendMessage() {
     typingDiv.querySelector('.msg-bubble').innerHTML = reply.replace(/\n/g, '<br>');
 
   } catch (err) {
+    console.error('Error:', err);
     typingDiv.querySelector('.msg-bubble').innerHTML =
-      `<span style="color:var(--accent)">Error: ${err.message}</span><br><small>Verifica que tu token HF tenga permiso de Inference API.</small>`;
+      `<span style="color:var(--accent)">Error: ${err.message}</span><br><small>Verifica que el servidor esté corriendo y la API key esté configurada.</small>`;
   }
 
   document.getElementById('send-btn').disabled = false;
