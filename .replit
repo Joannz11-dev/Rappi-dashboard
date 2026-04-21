@@ -31,3 +31,6 @@ outputType = "webview"
 
 [agent]
 expertMode = true
+
+[nix]
+packages = ["psmisc"]

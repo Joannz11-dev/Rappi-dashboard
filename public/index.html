@@ -397,47 +397,6 @@
     color: var(--muted);
     line-height: 1.5;
   }
-
-  /* API KEY INPUT */
-  .api-key-bar {
-    padding: 12px 24px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-shrink: 0;
-  }
-
-  .api-key-input {
-    flex: 1;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 7px 12px;
-    color: var(--text);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .api-key-input:focus { border-color: var(--accent3); }
-  .api-key-input::placeholder { color: var(--muted); }
-
-  .api-save-btn {
-    background: var(--accent3);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 7px 14px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-
-  .api-save-btn:hover { opacity: 0.85; }
-
   /* MESSAGES */
   .chat-messages {
     flex: 1;
@@ -758,11 +717,6 @@
       <div class="chat-desc">Pregunta sobre los datos de disponibilidad. El modelo tiene contexto real de los 201 archivos.</div>
     </div>
 
-    <div class="api-key-bar">
-      <input class="api-key-input" id="hf-key" type="password" placeholder="hf_... (Hugging Face token)">
-      <button class="api-save-btn" onclick="saveKey()">Guardar</button>
-    </div>
-
     <div class="chat-messages" id="chat-messages">
       <div class="msg bot">
         <div class="msg-avatar">AI</div>
@@ -1044,14 +998,6 @@ function updateKPIs(day) {
 let hfToken = null;
 let chatHistory = [];
 
-function saveKey() {
-  hfToken = document.getElementById('hf-key').value.trim();
-  if (hfToken) {
-    const bar = document.querySelector('.api-key-bar');
-    bar.innerHTML = '<span style="font-size:11px;color:var(--accent2)">✓ Token guardado. ¡Ya puedes chatear!</span>';
-  }
-}
-
 function addMsg(role, text, isTyping = false) {
   const container = document.getElementById('chat-messages');
   const div = document.createElement('div');
@@ -1162,23 +1108,18 @@ async function sendMessage() {
       }
     }
 
-    const res = await fetch(
-      'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3/v1/chat/completions',
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${hfToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'mistralai/Mistral-7B-Instruct-v0.3',
-          messages,
-          max_tokens: 400,
-          temperature: 0.4,
-          stream: false,
-        })
-      }
-    );
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'mistralai/Mistral-7B-Instruct-v0.3',
+        messages,
+        max_tokens: 200,
+        temperature: 0.4,
+      })
+    });
 
     const data = await res.json();
 
