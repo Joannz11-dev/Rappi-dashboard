@@ -2,20 +2,14 @@
 
 Dashboard operativo en tiempo real para monitorear la disponibilidad de tiendas en la plataforma Rappi, equipado con análisis histórico, visualizaciones interactivas y un asistente conversacional basado en IA.
 
+# Autor: Joann Alejandro Zamudio Castro
+
 ## Tabla de Contenidos
 
 - [Descripción General](#descripción-general)
 - [Características](#características)
 - [Arquitectura](#arquitectura)
 - [Tecnologías](#tecnologías)
-- [Instalación](#instalación)
-- [Configuración](#configuración)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [API](#api)
-- [Dataset](#dataset)
-- [Despliegue](#despliegue)
-- [Contribución](#contribución)
-- [Licencia](#licencia)
 
 ---
 
@@ -47,33 +41,6 @@ Este proyecto proporciona una solución integral para el análisis de disponibil
 
 ---
 
-## Arquitectura
-
-```text
-┌─────────────────────────────────────────────────────────┐
-│                        Frontend                         │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
-│  │ Dashboard   │  │ Charts      │  │ Chatbot     │     │
-│  │ (HTML)      │  │ (Chart.js)  │  │ (Custom)    │     │
-│  └─────────────┘  └─────────────┘  └─────────────┘     │
-└─────────────────────────┬───────────────────────────────┘
-                          │ HTTP/JSON
-┌─────────────────────────▼───────────────────────────────┐
-│                     Backend (Express)                   │
-│  ┌─────────────────────────────────────────────────┐   │
-│  │                /api/chat Endpoint               │   │
-│  └─────────────────────────────────────────────────┘   │
-│                         │                              │
-│       ┌─────────────────┼─────────────────┐            │
-│       ▼                 ▼                 ▼            │
-│  ┌────────────┐  ┌────────────┐  ┌────────────┐        │
-│  │ Dataset    │  │ HF         │  │ Memoria    │        │
-│  │ Search     │  │ Inference  │  │ Sesión     │        │
-│  └────────────┘  └────────────┘  └────────────┘        │
-└─────────────────────────────────────────────────────────┘
-```text
----
-
 ## Tecnologías
 
 ### Frontend
@@ -101,9 +68,29 @@ Este proyecto proporciona una solución integral para el análisis de disponibil
 - npm o yarn  
 - Cuenta en Hugging Face (para API key)  
 
-### Pasos
+---
+## Arquitectura
 
-1. Clonar el repositorio
-```bash
-git clone https://github.com/tu-usuario/rappi-store-availability.git
-cd rappi-store-availability
+```text
+┌─────────────────────────────────────────────────────────┐
+│                        Frontend                         │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
+│  │ Dashboard   │  │ Charts      │  │ Chatbot     │     │
+│  │ (HTML)      │  │ (Chart.js)  │  │ (Custom)    │     │
+│  └─────────────┘  └─────────────┘  └─────────────┘     │
+└─────────────────────────┬───────────────────────────────┘
+                          │ HTTP/JSON
+┌─────────────────────────▼───────────────────────────────┐
+│                     Backend (Express)                   │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │                /api/chat Endpoint               │   │
+│  └─────────────────────────────────────────────────┘   │
+│                         │                              │
+│       ┌─────────────────┼─────────────────┐            │
+│       ▼                 ▼                 ▼            │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐        │
+│  │ Dataset    │  │ HF         │  │ Memoria    │        │
+│  │ Search     │  │ Inference  │  │ Sesión     │        │
+│  └────────────┘  └────────────┘  └────────────┘        │
+└─────────────────────────────────────────────────────────┘
+---
