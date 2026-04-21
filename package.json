@@ -1,16 +1,18 @@
 {
-  "name": "workspace",
+  "name": "rappi-dashboard",
   "version": "1.0.0",
-  "description": "WoodlandFlow is a JavaScript-based system for generating chatbots using flowcharts, largely avoiding the use of AI technologies, making this system more accessible to people without technical knowledge.",
+  "description": "Rappi store availability dashboard",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon app.js",
+    "ngrok": "node app.js & npx ngrok http 5000"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^4.18.2",
+    "ngrok": "^5.0.0-beta.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
