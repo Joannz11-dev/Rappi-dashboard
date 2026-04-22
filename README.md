@@ -10,6 +10,7 @@ Dashboard operativo en tiempo real para monitorear la disponibilidad de tiendas 
 - [Características](#características)
 - [Arquitectura](#arquitectura)
 - [Tecnologías](#tecnologías)
+- [Generación del timeseries.json](#generacion-timeseries)
 
 ---
 
@@ -72,25 +73,60 @@ Este proyecto proporciona una solución integral para el análisis de disponibil
 ## Arquitectura
 
 ```text
-┌─────────────────────────────────────────────────────────┐
-│                        Frontend                         │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
-│  │ Dashboard   │  │ Charts      │  │ Chatbot     │     │
-│  │ (HTML)      │  │ (Chart.js)  │  │ (Custom)    │     │
-│  └─────────────┘  └─────────────┘  └─────────────┘     │
-└─────────────────────────┬───────────────────────────────┘
-                          │ HTTP/JSON
-┌─────────────────────────▼───────────────────────────────┐
-│                     Backend (Express)                   │
-│  ┌─────────────────────────────────────────────────┐   │
-│  │                /api/chat Endpoint               │   │
-│  └─────────────────────────────────────────────────┘   │
-│                         │                              │
-│       ┌─────────────────┼─────────────────┐            │
-│       ▼                 ▼                 ▼            │
-│  ┌────────────┐  ┌────────────┐  ┌────────────┐        │
-│  │ Dataset    │  │ HF         │  │ Memoria    │        │
-│  │ Search     │  │ Inference  │  │ Sesión     │        │
-│  └────────────┘  └────────────┘  └────────────┘        │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          CLIENTE (Navegador)                            │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                        Carpeta /public                            │  │
+│  │  ┌──────────────┐      ┌──────────────┐      ┌──────────────┐     │  │
+│  │  │  index.html  │◄────►│  style.css   │      │  script.js   │     │  │
+│  │  │   (Vista)    │      │  (Diseño)    │      │ (Lógica Neg) │     │  │
+│  │  └──────────────┘      └──────────────┘      └──────┬───────┘     │  │
+│  └──────────────────────────────────────────────────────│────────────┘  │
+└─────────────────────────────────────────────────────────│───────────────┘
+                                                          │
+                                         Llamadas Internas│(Funciones/Eventos)
+                                                          ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          CONTROLADOR LOCAL                              │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                            app.js                                 │  │
+│  │       (Maneja conexión API, Salida Local y Rutas Express)         │  │
+│  └──────────┬──────────────────────┬───────────────────────┬─────────┘  │
+└─────────────│──────────────────────│───────────────────────│────────────┘
+              │                      │                       │
+              ▼                      ▼                       ▼
+    ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
+    │   Hugging Face   │    │  Archivos JSON   │    │   Assets / Git   │
+    │   Inference API  │    │ (Entrenamiento)  │    │  (Estáticos/V)   │
+    │   (Modelo IA)    │    │  (TimeSeries)    │    │  (.git/.agents)  │
+    └──────────────────┘    └──────────────────┘    └──────────────────┘
+```
 ---
+## Generación del timeseries.json
+
+En el siguiente repositorio de Google Colab se documenta el proceso completo de construcción del archivo `timeseries.json`:
+
+https://colab.research.google.com/drive/173wsovdvyZr0jpPYVRzKn2GxpzKELwcH?usp=sharing
+
+Este archivo es un componente central del proyecto, ya que consolida la información proveniente de **201 archivos CSV** en una única estructura unificada.
+
+### Relevancia dentro del sistema
+
+- **Unificación de datos**: Integra múltiples fuentes dispersas (CSV) en un solo dataset consistente.
+- **Transformación estructural**: Convierte datos en formato de columnas (no convencional) a una serie temporal estándar.
+- **Limpieza de datos**: Elimina duplicados por timestamp, evitando inconsistencias en métricas y visualizaciones.
+- **Optimización para consumo**: Genera un formato JSON (`{ts, value}`) ideal para:
+  - Visualización en frontend (gráficas)
+  - Procesamiento por parte de la IA
+  - Consultas rápidas y eficientes
+
+### Importancia para la IA
+
+El `timeseries.json` actúa como el **puente entre los datos crudos y la inteligencia del sistema**, permitiendo que los modelos trabajen con información:
+- ordenada cronológicamente
+- libre de redundancias
+- estructurada de forma simple y predecible
+
+Sin este proceso, el análisis directo sobre los CSV sería más complejo, costoso y propenso a errores.
+---
+
