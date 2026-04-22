@@ -12,7 +12,6 @@ Dashboard operativo en tiempo real para monitorear la disponibilidad de tiendas 
 - [Instalación](#instalacion)
 - [Arquitectura](#arquitectura)
 - [Generación del timeseries.json](#generacion-del-timeseriesjson)
-
 ---
 
 ##  Descripción General
