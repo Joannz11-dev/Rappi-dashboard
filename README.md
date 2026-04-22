@@ -70,8 +70,6 @@ Este proyecto proporciona una solución integral para el análisis de disponibil
 - npm o yarn  
 - Cuenta en Hugging Face (para API key)
 
-[![Ver video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
-
 ---
 ## Arquitectura
 
@@ -135,7 +133,7 @@ Sin este proceso, el análisis directo sobre los CSV sería más complejo, costo
 ---
 ## Explicación
 
-[![Ver video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+[![Ver video](https://www.youtube.com/watch?v=wfg28VszK3E/0.jpg)](https://www.youtube.com/watch?v=wfg28VszK3E)
 
 ---
 ## Problemas a corregir
