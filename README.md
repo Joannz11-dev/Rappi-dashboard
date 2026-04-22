@@ -6,11 +6,12 @@ Dashboard operativo en tiempo real para monitorear la disponibilidad de tiendas 
 
 ## Tabla de Contenidos
 
-- [Descripción General](#descripción-general)
-- [Características](#características)
+- [Descripción General](#descripcion-general)
+- [Características](#caracteristicas)
+- [Tecnologías](#tecnologias)
+- [Instalación](#instalacion)
 - [Arquitectura](#arquitectura)
-- [Tecnologías](#tecnologías)
-- [Generación del timeseries.json](#generacion-timeseries)
+- [Generación del timeseries.json](#generacion-del-timeseriesjson)
 
 ---
 
@@ -67,7 +68,9 @@ Este proyecto proporciona una solución integral para el análisis de disponibil
 ### Requisitos Previos
 - Node.js (v18 o superior)  
 - npm o yarn  
-- Cuenta en Hugging Face (para API key)  
+- Cuenta en Hugging Face (para API key)
+
+[![Ver video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
 
 ---
 ## Arquitectura
