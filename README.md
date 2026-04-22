@@ -70,9 +70,74 @@ Este proyecto proporciona una solución integral para el análisis de disponibil
 ## Instalación
 
 ### Requisitos Previos
-- Node.js (v18 o superior)  
-- npm o yarn  
-- Cuenta en Hugging Face (para API key)
+
+- [Node.js](https://nodejs.org/) v18 o superior
+- npm (incluido con Node.js)
+- Cuenta en [Hugging Face](https://huggingface.co/) con una API key activa
+
+---
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/Joannz11-dev/Rappi-dashboard.git
+cd Rappi-dashboard
+```
+
+---
+
+### 2. Instalar dependencias
+
+```bash
+npm install
+```
+
+---
+
+### 3. Configurar variables de entorno
+
+Crea un archivo `.env` en la raíz del proyecto con el siguiente contenido:
+
+```env
+HF_API_KEY=tu_api_key_de_huggingface
+PORT=3000
+```
+
+> Puedes obtener tu API key en [https://huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
+
+---
+
+### 4. Iniciar el servidor
+
+```bash
+node app.js
+```
+
+---
+
+### 5. Abrir en el navegador
+
+```
+http://localhost:3000
+```
+
+> ⚠️ **Nota importante:** Evita usar el filtro **"Todos los días"** ya que genera sobrecarga en el aplicativo. Usa filtros por día específico para una mejor experiencia.
+
+---
+
+### Estructura de archivos relevantes
+
+```
+Rappi-dashboard/
+├── public/          # Frontend (HTML, CSS, JS)
+├── assets/          # Recursos estáticos
+├── app.js           # Servidor Express y lógica principal
+├── dataset_entrenamiento.json  # Respuestas predefinidas del asistente
+├── timeseries.json  # Serie temporal unificada (generada desde CSVs)
+└── .env             # Variables de entorno (no subir a git)
+```
+
+> 💡 Si no tienes el archivo `timeseries.json`, puedes generarlo siguiendo el proceso documentado en este [Google Colab](https://colab.research.google.com/drive/173wsovdvyZr0jpPYVRzKn2GxpzKELwcH?usp=sharing).
 
 ---
 ## Arquitectura
