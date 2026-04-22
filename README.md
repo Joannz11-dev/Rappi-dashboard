@@ -140,5 +140,5 @@ Sin este proceso, el análisis directo sobre los CSV sería más complejo, costo
 - Optimizar código para hacer el programa más fluido
 - Posibles fallos de compatibilidad con el navegador brave
 - Mejorar la parte de la tabla con las incidencias para agregar filtros y buscadores
-
+### URGENTE: Filtro de "todos los días" genera sobrecarga en el aplicativo, no utilizar para mejor experiencia de navegación
 
