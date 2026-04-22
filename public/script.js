@@ -66,14 +66,108 @@ const SUMMARY = {
 let ALL_TS = [];
 let filteredDay = "all";
 
+// Función para formatear números exactos
+const fmt = (v) => {
+  return v.toLocaleString("es-CO");
+};
+
+// Función para encontrar el timestamp del máximo valor
+function findMaxTimestamp(data) {
+  if (!data || data.length === 0) return null;
+
+  let maxValue = -Infinity;
+  let maxTimestamp = null;
+
+  data.forEach((point) => {
+    if (point.value > maxValue) {
+      maxValue = point.value;
+      maxTimestamp = point.ts;
+    }
+  });
+
+  return { value: maxValue, timestamp: maxTimestamp };
+}
+
+// Función para calcular estadísticas desde los datos reales
+function calculateStatsFromData(data) {
+  if (!data || data.length === 0) return null;
+
+  const values = data.map((d) => d.value);
+  const sum = values.reduce((a, b) => a + b, 0);
+  const avg = sum / values.length;
+  const max = Math.max(...values);
+  const min = Math.min(...values);
+
+  // Calcular momentos críticos (valores < 100,000)
+  const criticalMoments = values.filter((v) => v < 100000).length;
+
+  // Calcular promedio por hora
+  const hourMap = new Map();
+  data.forEach((point) => {
+    const hour = new Date(point.ts).getHours();
+    if (!hourMap.has(hour)) {
+      hourMap.set(hour, []);
+    }
+    hourMap.get(hour).push(point.value);
+  });
+
+  let peakHour = 0;
+  let peakHourAvg = 0;
+
+  hourMap.forEach((values, hour) => {
+    const hourAvg = values.reduce((a, b) => a + b, 0) / values.length;
+    if (hourAvg > peakHourAvg) {
+      peakHourAvg = hourAvg;
+      peakHour = hour;
+    }
+  });
+
+  return { avg, max, min, criticalMoments, peakHour, peakHourAvg };
+}
+
+// Función para actualizar KPIs con datos reales
+function updateKPIsWithRealData() {
+  if (ALL_TS && ALL_TS.length > 0) {
+    const stats = calculateStatsFromData(ALL_TS);
+    const maxInfo = findMaxTimestamp(ALL_TS);
+
+    document.getElementById("kpi-avg").textContent = fmt(Math.round(stats.avg));
+    document.getElementById("kpi-max").textContent = fmt(stats.max);
+    document.getElementById("kpi-peak").textContent = `${stats.peakHour}:00`;
+    document.getElementById("kpi-crit").textContent = fmt(
+      stats.criticalMoments,
+    );
+
+    if (maxInfo && maxInfo.timestamp) {
+      const date = new Date(maxInfo.timestamp);
+      const formattedDate = `${date.getMonth() + 1}/${date.getDate()}`;
+      const formattedHour = date.getHours().toString().padStart(2, "0");
+      const formattedMinute = date.getMinutes().toString().padStart(2, "0");
+      document.getElementById("kpi-max-sub").textContent =
+        `${formattedDate} · ${formattedHour}:${formattedMinute} hrs`;
+    }
+  } else {
+    // Fallback a SUMMARY si no hay datos
+    document.getElementById("kpi-avg").textContent = fmt(SUMMARY.overall_avg);
+    document.getElementById("kpi-max").textContent = fmt(SUMMARY.overall_max);
+    document.getElementById("kpi-peak").textContent = `${SUMMARY.peak_hour}:00`;
+    document.getElementById("kpi-crit").textContent = fmt(
+      SUMMARY.critical_moments_count,
+    );
+    document.getElementById("kpi-max-sub").textContent = `Feb 06 · 17:00 hrs`;
+  }
+}
+
 fetch("timeseries.json")
   .then((r) => r.json())
   .then((d) => {
     ALL_TS = d.data;
+    updateKPIsWithRealData();
     renderTimeChart(ALL_TS);
   })
   .catch(() => {
     console.warn("timeseries.json not found, using summary data");
+    updateKPIsWithRealData();
     renderTimeChart([]);
   });
 
@@ -81,12 +175,6 @@ Chart.defaults.color = "#5a5a72";
 Chart.defaults.borderColor = "#1e1e2e";
 Chart.defaults.font.family = "'DM Mono', monospace";
 Chart.defaults.font.size = 10;
-
-const fmt = (v) => {
-  if (v >= 1e6) return (v / 1e6).toFixed(2) + "M";
-  if (v >= 1e3) return (v / 1e3).toFixed(0) + "K";
-  return v;
-};
 
 let timeChart;
 function renderTimeChart(data) {
@@ -327,11 +415,19 @@ function filterDay(day, btn) {
 
 function updateKPIs(day) {
   if (day === "all") {
-    document.getElementById("kpi-avg").textContent = fmt(SUMMARY.overall_avg);
-    document.getElementById("kpi-max").textContent = fmt(SUMMARY.overall_max);
-    document.getElementById("kpi-peak").textContent = SUMMARY.peak_hour + ":00";
-    document.getElementById("kpi-crit").textContent =
-      SUMMARY.critical_moments_count.toLocaleString();
+    // Usar datos reales si están disponibles
+    if (ALL_TS && ALL_TS.length > 0) {
+      updateKPIsWithRealData();
+    } else {
+      document.getElementById("kpi-avg").textContent = fmt(SUMMARY.overall_avg);
+      document.getElementById("kpi-max").textContent = fmt(SUMMARY.overall_max);
+      document.getElementById("kpi-peak").textContent =
+        SUMMARY.peak_hour + ":00";
+      document.getElementById("kpi-crit").textContent = fmt(
+        SUMMARY.critical_moments_count,
+      );
+      document.getElementById("kpi-max-sub").textContent = `Feb 06 · 17:00 hrs`;
+    }
   } else {
     const d = SUMMARY.per_day.find((p) => p.date === day);
     if (d) {
@@ -340,6 +436,8 @@ function updateKPIs(day) {
       document.getElementById("kpi-peak").textContent = "—";
       document.getElementById("kpi-crit").textContent =
         d.min < 100000 ? "Sí" : "OK";
+      document.getElementById("kpi-max-sub").textContent =
+        `${day.slice(5)} · Máximo del día`;
     }
   }
 }

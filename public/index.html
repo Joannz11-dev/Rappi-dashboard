@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rappi Store Availability — Ops Dashboard</title>
+    <title>Rappi store availability — Ops dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap"
@@ -14,13 +14,44 @@
   <body>
     <header class="header">
       <div class="logo">
-        <div class="logo-icon">R</div>
-        <div class="logo-text">Rappi <span>/ Store Availability</span></div>
+        <div class="logo-icon">
+          <img src="/assets/rappilogo.png" alt="R" />
+        </div>
+        <div class="logo-text">Rappi <span>/ Store availability</span></div>
       </div>
-      <div class="header-meta"></div>
+
+      <div class="header-meta">
+        <button
+          class="chat-toggle-btn active"
+          id="chat-toggle-btn"
+          onclick="toggleChat()"
+        >
+          <div
+            class="chat-pet-avatar"
+            style="position: relative; width: 26px; height: 26px"
+          >
+            <div class="toggle-pet-glow"></div>
+            <div class="toggle-pet">
+              <img src="/assets/pet.png" alt="IA" />
+            </div>
+          </div>
+          <span class="toggle-label">Asistente IA</span>
+          <svg
+            class="toggle-chevron"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+      </div>
     </header>
 
-    <div class="app">
+    <div class="app" id="app">
       <div class="dashboard">
         <div class="filter-bar">
           <button class="filter-btn active" onclick="filterDay('all', this)">
@@ -64,22 +95,22 @@
         <div class="kpi-grid">
           <div class="kpi green">
             <div class="kpi-label">Promedio tiendas online</div>
-            <div class="kpi-value" id="kpi-avg">3.21M</div>
+            <div class="kpi-value" id="kpi-avg">--</div>
             <div class="kpi-sub">Tiendas visibles por momento</div>
           </div>
           <div class="kpi red">
             <div class="kpi-label">Pico máximo</div>
-            <div class="kpi-value" id="kpi-max">6.20M</div>
-            <div class="kpi-sub">Feb 06 · 17:00 hrs</div>
+            <div class="kpi-value" id="kpi-max">--</div>
+            <div class="kpi-sub" id="kpi-max-sub">Cargando...</div>
           </div>
           <div class="kpi purple">
             <div class="kpi-label">Hora pico</div>
-            <div class="kpi-value" id="kpi-peak">5PM</div>
+            <div class="kpi-value" id="kpi-peak">--</div>
             <div class="kpi-sub">Mayor disponibilidad promedio</div>
           </div>
           <div class="kpi yellow">
             <div class="kpi-label">Momentos críticos</div>
-            <div class="kpi-value" id="kpi-crit">7,240</div>
+            <div class="kpi-value" id="kpi-crit">--</div>
             <div class="kpi-sub">Puntos con &lt;100K tiendas</div>
           </div>
         </div>
@@ -144,22 +175,31 @@
           <div id="incident-list"></div>
         </div>
       </div>
-
-      <div class="chatbot">
+      <div class="chatbot" id="chatbot-panel">
         <div class="chat-header">
-          <div class="chat-header-top">
-            <div class="chat-title">Asistente de datos</div>
-            <span class="chat-model-badge">HF · Mistral-7B</span>
-          </div>
-          <div class="chat-desc">
-            Pregunta sobre los datos de disponibilidad. El modelo tiene contexto
-            real de los 201 archivos.
+          <div class="chat-header-banner">
+            <div class="chat-pet-avatar">
+              <div class="chat-pet-ring"></div>
+              <div class="chat-pet-ring-2"></div>
+              <img class="chat-pet-img" src="/assets/pet.png" alt="IA" />
+              <div class="chat-status-dot"></div>
+            </div>
+            <div class="chat-header-info">
+              <div class="chat-title">Asistente de datos</div>
+              <span class="chat-model-badge">CLAUDE · Sonnet</span>
+              <div class="chat-desc">
+                Pregunta sobre los datos de disponibilidad. El modelo tiene
+                contexto real de los 201 archivos.
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="chat-messages" id="chat-messages">
           <div class="msg bot">
-            <div class="msg-avatar">AI</div>
+            <div class="msg-avatar">
+              <img src="/assets/pet.png" alt="IA" />
+            </div>
             <div>
               <div class="msg-bubble">
                 Hola 👋 Soy tu asistente de operaciones. Tengo acceso al
@@ -236,5 +276,13 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+      function toggleChat() {
+        const app = document.getElementById("app");
+        const btn = document.getElementById("chat-toggle-btn");
+        const isHidden = app.classList.toggle("chat-hidden");
+        btn.classList.toggle("active", !isHidden);
+      }
+    </script>
   </body>
 </html>
