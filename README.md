@@ -133,7 +133,6 @@ Rappi-dashboard/
 ├── assets/          # Recursos estáticos
 ├── app.js           # Servidor Express y lógica principal
 ├── dataset_entrenamiento.json  # Respuestas predefinidas del asistente
-├── timeseries.json  # Serie temporal unificada (generada desde CSVs)
 └── .env             # Variables de entorno (no subir a git)
 ```
 
