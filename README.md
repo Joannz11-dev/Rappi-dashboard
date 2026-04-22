@@ -12,6 +12,8 @@ Dashboard operativo en tiempo real para monitorear la disponibilidad de tiendas 
 - [Instalación](#instalacion)
 - [Arquitectura](#arquitectura)
 - [Generación del timeseries.json](#generacion-del-timeseriesjson)
+- [Explicación](#explicacion)
+- [Problemas a corregir](#problemas-a-corregir)
 ---
 
 ##  Descripción General
@@ -47,7 +49,6 @@ Este proyecto proporciona una solución integral para el análisis de disponibil
 ### Frontend
 - HTML5 / CSS3  
 - JavaScript (Vanilla)  
-- Chart.js 4.4.1 — Visualización de datos  
 - Google Fonts (DM Mono, Syne)  
 
 ### Backend
@@ -130,5 +131,16 @@ El `timeseries.json` actúa como el **puente entre los datos crudos y la intelig
 - estructurada de forma simple y predecible
 
 Sin este proceso, el análisis directo sobre los CSV sería más complejo, costoso y propenso a errores.
+
 ---
+## Explicación
+
+[![Ver video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+
+---
+## Problemas a corregir
+- Optimizar código para hacer el programa más fluido
+- Posibles fallos de compatibilidad con el navegador brave
+- Mejorar la parte de la tabla con las incidencias para agregar filtros y buscadores
+
 
