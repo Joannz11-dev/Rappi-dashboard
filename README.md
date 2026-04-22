@@ -133,7 +133,7 @@ Sin este proceso, el análisis directo sobre los CSV sería más complejo, costo
 ---
 ## Explicación
 
-[![Ver video](https://www.youtube.com/watch?v=wfg28VszK3E/0.jpg)](https://www.youtube.com/watch?v=wfg28VszK3E)
+[![Ver video](https://www.youtube.com/watch?v=wfg28VszK3E/)](https://www.youtube.com/watch?v=wfg28VszK3E)
 
 ---
 ## Problemas a corregir
