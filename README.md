@@ -4,6 +4,10 @@ Dashboard operativo en tiempo real para monitorear la disponibilidad de tiendas 
 
 ### Autor: Joann Alejandro Zamudio Castro
 
+## URGENTE: Filtro de "todos los días" genera sobrecarga en el aplicativo, no utilizar para mejor experiencia de navegación
+
+<img width="785" height="421" alt="advertencia" src="https://github.com/user-attachments/assets/d64009b3-f866-4bb9-ac70-551bc44f96cf" />
+
 ## Tabla de Contenidos
 
 - [Descripción General](#descripcion-general)
